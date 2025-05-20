@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.content.Intent;
 
 public class Register extends AppCompatActivity {
@@ -15,6 +16,7 @@ public class Register extends AppCompatActivity {
     EditText email, username, password, passwordConfirm;
     Button registerButton;
     TextView signinText;
+    ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class Register extends AppCompatActivity {
         password = findViewById(R.id.editTextPwd);
         passwordConfirm = findViewById(R.id.editTextPwdConfirme);
         registerButton = findViewById(R.id.registerButton);
+        btnBack = findViewById(R.id.btnBack);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,10 +53,14 @@ public class Register extends AppCompatActivity {
                         dbConnect.addUser(user);
 
                         String verificationCode = generateVerificationCode();
+                        System.out.println("Code de verification Generer : " + verificationCode);
                         dbConnect.storeVerificationCode(strEmail, verificationCode);
 
                         MailSender mailSender = new MailSender();
                         mailSender.sendVerificationEmail(strEmail, verificationCode);
+                        System.out.println("Mail envoyer");
+
+
 
                         Toast.makeText(Register.this, "Register Successful !", Toast.LENGTH_SHORT).show();
 
@@ -70,6 +77,14 @@ public class Register extends AppCompatActivity {
         });
 
         signinText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Register.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Register.this, MainActivity.class);

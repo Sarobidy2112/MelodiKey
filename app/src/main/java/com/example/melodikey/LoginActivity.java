@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.content.Intent;
 
 
@@ -18,6 +19,7 @@ import android.content.SharedPreferences;
 public class LoginActivity extends AppCompatActivity {
 
     DbConnect dbConnect;
+    ImageView btnBack;
     EditText email;
     EditText password;
     Button loginButton;
@@ -34,16 +36,27 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextEmail);
         password = findViewById(R.id.editTextPwd);
         loginButton = findViewById(R.id.loginButton);
+        btnBack = findViewById(R.id.btnBack);
 
         // Initialiser SharedPreferences
         sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
 
         // Vérifier si l'utilisateur est déjà connecté
         if (isUserLoggedIn()) {
+            System.out.println("Utilisateur déjà connecté !");
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish(); // Fermer LoginActivity pour empêcher le retour
         }
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Vers MainActivity!");
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,14 +83,17 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("user_email", user.getEmail());
                         editor.apply();
 
+                        System.out.println("Login successful!");
                         Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish(); // Fermer LoginActivity
                     } else {
                         Toast.makeText(LoginActivity.this, "Failed to retrieve user info.", Toast.LENGTH_SHORT).show();
+                        System.out.println("Failed to retrieve user info.");
                     }
                 } else {
+                    System.out.println("Login Failed! Wrong Email or Password.");
                     Toast.makeText(LoginActivity.this, "Login Failed! Wrong Email or Password.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -86,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("Vers Register!");
                 Intent intent = new Intent(LoginActivity.this, Register.class);
                 startActivity(intent);
             }
