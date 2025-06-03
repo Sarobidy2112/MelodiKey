@@ -3,32 +3,27 @@ package com.example.melodikey;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import android.content.SharedPreferences;
-import android.widget.Toast;
-
 public class OrganizeActivity extends AppCompatActivity {
 
+    private static final int LOCATION_REQUEST_CODE = 100;
 
     TextView textDate;
+    EditText textLocation;
     TextView textView;
     SharedPreferences sharedPreferences;
     ImageView btnToLogin;
@@ -42,15 +37,18 @@ public class OrganizeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_organize);
 
         sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
-        btnToLogin = findViewById(R.id.btnToLogin);
-        textView = findViewById(R.id.textView);
 
+        textView = findViewById(R.id.textView);
+        btnToLogin = findViewById(R.id.btnToLogin);
+        textDate = findViewById(R.id.textDate);
+        textLocation = findViewById(R.id.textLocation);
+        datePicker = findViewById(R.id.datePicker);
+        locationPicker = findViewById(R.id.locationPicker);
 
         // Vérifie si l'utilisateur est connecté
         boolean isLoggedIn = sharedPreferences.contains("user_email");
 
         if (isLoggedIn) {
-            // Modifier le texte pour "Se déconnecter"
             textView.setText("Se déconnecter");
             btnToLogin.setImageResource(R.drawable.deconnexion);
         } else {
@@ -58,61 +56,54 @@ public class OrganizeActivity extends AppCompatActivity {
             btnToLogin.setImageResource(R.drawable.connexion);
         }
 
-        btnToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isLoggedIn = sharedPreferences.contains("user_email");
+        btnToLogin.setOnClickListener(v -> {
+            boolean loggedIn = sharedPreferences.contains("user_email");
 
-                if (isLoggedIn) {
-                    // Déconnexion
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.apply();
+            if (loggedIn) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
 
-                    Toast.makeText(OrganizeActivity.this, "Déconnecté avec succès", Toast.LENGTH_SHORT).show();
-
-                    // Recharger MainActivity pour mettre à jour le bouton
-                    Intent intent = new Intent(OrganizeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    // Rediriger vers la connexion
-                    Intent intent = new Intent(OrganizeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
+                Toast.makeText(OrganizeActivity.this, "Déconnecté avec succès", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(OrganizeActivity.this, LoginActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(OrganizeActivity.this, LoginActivity.class));
             }
         });
 
-        datePicker = findViewById(R.id.datePicker);
-        textDate = findViewById(R.id.textDate);
+        // Picker pour la date
+        datePicker.setOnClickListener(v -> {
+            MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Sélectionner la date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build();
 
-        datePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MaterialDatePicker<Long>materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText("Selectioner la date")
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                        .build();
-                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
-                    @Override
-                    public void onPositiveButtonClick(Long selection) {
-                        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date(selection));
-                        textDate.setHint("      Date selectioner : " + date);
-                    }
-                });
+            materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+                String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date(selection));
+                textDate.setHint("      Date sélectionnée : " + date);
+            });
 
-                materialDatePicker.show(getSupportFragmentManager(),"tag");
-            }
+            materialDatePicker.show(getSupportFragmentManager(), "tag");
         });
 
-        locationPicker = findViewById(R.id.locationPicker);
-
-        locationPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OrganizeActivity.this,MapLocationActivity.class);
-                startActivity(intent);
-            }
+        // Picker pour la localisation
+        locationPicker.setOnClickListener(v -> {
+            Intent intent = new Intent(OrganizeActivity.this, MapLocationActivity.class);
+            startActivityForResult(intent, LOCATION_REQUEST_CODE);
         });
+    }
+
+    // Récupère la localisation sélectionnée depuis MapLocationActivity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOCATION_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            String selectedLocation = data.getStringExtra("selected_location");
+            if (selectedLocation != null) {
+                textLocation.setHint("      Lieu : " + selectedLocation);
+            }
+        }
     }
 }

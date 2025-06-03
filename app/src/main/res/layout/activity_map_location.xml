@@ -12,6 +12,32 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-51dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <SearchView
+        android:id="@+id/mapSearch"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/custom_search_view"
+        android:elevation="5dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Recherche ... "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="20dp" />
+
+    <Button
+        android:id="@+id/locationConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/purple"
+        android:text="Confirmer"
+        android:textSize="18sp"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="35dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
