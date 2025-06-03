@@ -49,4 +49,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.android.mail)
     implementation(libs.android.activation)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
+
 }

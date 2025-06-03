@@ -32,7 +32,8 @@ public class OrganizeActivity extends AppCompatActivity {
     TextView textView;
     SharedPreferences sharedPreferences;
     ImageView btnToLogin;
-    Button datePicker;
+    ImageView datePicker;
+    ImageView locationPicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +96,22 @@ public class OrganizeActivity extends AppCompatActivity {
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        String date = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(new Date(selection));
-                        textDate.setText(MessageFormat.format("Date selectionner : {0}",date));
+                        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date(selection));
+                        textDate.setHint("      Date selectioner : " + date);
                     }
                 });
 
                 materialDatePicker.show(getSupportFragmentManager(),"tag");
+            }
+        });
+
+        locationPicker = findViewById(R.id.locationPicker);
+
+        locationPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrganizeActivity.this,MapLocationActivity.class);
+                startActivity(intent);
             }
         });
     }
