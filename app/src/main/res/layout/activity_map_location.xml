@@ -19,15 +19,16 @@
     <SearchView
         android:id="@+id/mapSearch"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         android:layout_margin="20dp"
         android:background="@drawable/custom_search_view"
         android:elevation="5dp"
         android:iconifiedByDefault="false"
         android:queryHint="Recherche ... "
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="20dp" />
+        tools:layout_editor_absoluteY="44dp" />
 
     <Button
         android:id="@+id/locationConfirm"

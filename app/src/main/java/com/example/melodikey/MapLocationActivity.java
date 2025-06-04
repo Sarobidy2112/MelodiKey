@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
+import java.util.Locale;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +36,8 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
 
     private GoogleMap myMap;
     private final int FINE_PERMISSION_CODE = 1;
+    private Marker searchMarker;
+
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     SearchView mapSearch;
@@ -46,6 +50,7 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_map_location);
 
+
         locationConfirm = findViewById(R.id.locationConfirm);
 
         mapSearch = findViewById(R.id.mapSearch);
@@ -54,7 +59,6 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 if (myMap == null) {
                     Toast.makeText(MapLocationActivity.this, "La carte n'est pas encore prête", Toast.LENGTH_SHORT).show();
                     return false;
@@ -75,10 +79,16 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
                     if (addressList != null && !addressList.isEmpty()) {
                         Address address = addressList.get(0);
                         LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                        myMap.addMarker(new MarkerOptions()
+
+                        myMap.clear();
+
+                        // Ajoute le nouveau marqueur
+                        searchMarker = myMap.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(locationSearch));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+
+
                     } else {
                         Toast.makeText(MapLocationActivity.this, "Aucun résultat trouvé", Toast.LENGTH_SHORT).show();
                     }
@@ -101,24 +111,76 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onClick(View v) {
                 if (myMap != null) {
-                    LatLng selectedLatLng = myMap.getCameraPosition().target;
+                    LatLng selectedLatLng;
+                    String searchedPlaceName = (searchMarker != null) ? searchMarker.getTitle() : null;
 
-                    Geocoder geocoder = new Geocoder(MapLocationActivity.this);
+                    // Si l'utilisateur a fait une recherche, utiliser le marqueur de recherche
+                    if (searchMarker != null) {
+                        selectedLatLng = searchMarker.getPosition();
+                    }
+                    // Sinon, utiliser la position actuelle de la caméra
+                    else {
+                        selectedLatLng = myMap.getCameraPosition().target;
+                    }
+
+                    // Utiliser le Geocoder pour obtenir les détails de l'adresse
+                    Geocoder geocoder = new Geocoder(MapLocationActivity.this, Locale.getDefault());
                     try {
-                        List<Address> addresses = geocoder.getFromLocation(selectedLatLng.latitude, selectedLatLng.longitude, 1);
-                        if (addresses != null && !addresses.isEmpty()) {
-                            String fullAddress = addresses.get(0).getAddressLine(0);
+                        List<Address> addresses = geocoder.getFromLocation(
+                                selectedLatLng.latitude,
+                                selectedLatLng.longitude,
+                                1
+                        );
 
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("selected_location", fullAddress);
-                            setResult(RESULT_OK, resultIntent);
-                            finish();
-                        } else {
-                            Toast.makeText(MapLocationActivity.this, "Aucune adresse trouvée", Toast.LENGTH_SHORT).show();
+                        StringBuilder locationText = new StringBuilder();
+
+                        // 1. Ajouter le nom recherché s'il existe
+                        if (searchedPlaceName != null && !searchedPlaceName.isEmpty()) {
+                            locationText.append(searchedPlaceName);
                         }
+
+                        // 2. Ajouter les détails de l'adresse (ville, quartier, rue)
+                        if (addresses != null && !addresses.isEmpty()) {
+                            Address address = addresses.get(0);
+
+                            String locality = address.getLocality();       // Ville (ex: "Antananarivo")
+                            String subLocality = address.getSubLocality(); // Quartier (ex: "Analakely")
+                            String thoroughfare = address.getThoroughfare(); // Rue (ex: "Rue Ratsimilaho")
+
+                            // Construire une adresse lisible
+                            if (locality != null && !locality.isEmpty()) {
+                                if (locationText.length() > 0) locationText.append(", ");
+                                locationText.append(locality);
+                            }
+                            if (subLocality != null && !subLocality.isEmpty()) {
+                                if (locationText.length() > 0) locationText.append(", ");
+                                locationText.append(subLocality);
+                            }
+                            if (thoroughfare != null && !thoroughfare.isEmpty()) {
+                                if (locationText.length() > 0) locationText.append(", ");
+                                locationText.append(thoroughfare);
+                            }
+                        }
+
+                        // Si aucun texte n'a été généré (cas rare), utiliser "Position sélectionnée"
+                        if (locationText.length() == 0) {
+                            locationText.append("Position sélectionnée");
+                        }
+
+                        // Retourner le résultat à OrganizeActivity
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("selected_location", locationText.toString());
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Toast.makeText(MapLocationActivity.this, "Erreur lors de la recherche d'adresse", Toast.LENGTH_SHORT).show();
+                        // En cas d'erreur, retourner le nom recherché ou "Position inconnue"
+                        String fallbackText = (searchedPlaceName != null) ? searchedPlaceName : "Position inconnue";
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("selected_location", fallbackText);
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
                     }
                 }
             }
@@ -162,7 +224,6 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
 
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordonne, 12f));
 
-        // Activer la recherche après que la position actuelle soit affichée
         mapSearch.setEnabled(true);
     }
 

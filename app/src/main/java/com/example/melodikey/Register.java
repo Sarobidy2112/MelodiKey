@@ -48,9 +48,22 @@ public class Register extends AppCompatActivity {
                     if (dbConnect.checkUserExists(strEmail, strUsername)) {
                         Toast.makeText(Register.this, "Register Failed! Email or Username already exists.", Toast.LENGTH_SHORT).show();
                     } else {
+
+                        System.out.println("Username = " + strUsername);
+                        System.out.println("Email = " + strEmail);
+                        System.out.println("Password = " + strPassword);
+                        System.out.println("Password Confirm = " + strPasswordConfirm);
+
                         String hashedPassword = PasswordHasher.hashPassword(strPassword);
+                        System.out.println("Password Hasher = " + hashedPassword);
+
+                        
                         Users user = new Users(0, strUsername, strEmail, hashedPassword,0, 0);
                         dbConnect.addUser(user);
+
+
+
+
 
                         String verificationCode = generateVerificationCode();
                         System.out.println("Code de verification Generer : " + verificationCode);

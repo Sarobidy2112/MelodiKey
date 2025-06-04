@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 String strPassword = password.getText().toString();
 
                 if (strEmail.isEmpty() || strPassword.isEmpty()) {
+                    System.out.println("Login Failed - Empty");
                     Toast.makeText(LoginActivity.this, "Login Failed !", Toast.LENGTH_SHORT).show();
                     return;
                 }

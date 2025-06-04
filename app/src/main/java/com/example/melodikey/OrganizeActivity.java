@@ -3,8 +3,13 @@ package com.example.melodikey;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,8 @@ public class OrganizeActivity extends AppCompatActivity {
 
     private static final int LOCATION_REQUEST_CODE = 100;
 
+    String[] evenements = {"Mariages", "Eglise", "Concerts", "Animations"};
+
     TextView textDate;
     EditText textLocation;
     TextView textView;
@@ -29,6 +36,8 @@ public class OrganizeActivity extends AppCompatActivity {
     ImageView btnToLogin;
     ImageView datePicker;
     ImageView locationPicker;
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterEvenement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,34 @@ public class OrganizeActivity extends AppCompatActivity {
         textLocation = findViewById(R.id.textLocation);
         datePicker = findViewById(R.id.datePicker);
         locationPicker = findViewById(R.id.locationPicker);
+
+        Spinner spinnerEvenements = findViewById(R.id.spinner_evenements);
+
+        ArrayAdapter<String> adapterEvenement = new ArrayAdapter<String>(
+                this,
+                R.layout.spinner_item,
+                evenements
+        );
+        adapterEvenement.setDropDownViewResource(R.layout.spinner_dropdown_item);
+
+        // Appliquer l'adapter au spinner
+        spinnerEvenements.setAdapter(adapterEvenement);
+
+        // Listener pour gérer la sélection
+        spinnerEvenements.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) { // Ignorer le premier item qui est le placeholder
+                    String evenement = parent.getItemAtPosition(position).toString();
+                    Toast.makeText(OrganizeActivity.this, "Événement : " + evenement, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Ne rien faire
+            }
+        });
 
         // Vérifie si l'utilisateur est connecté
         boolean isLoggedIn = sharedPreferences.contains("user_email");
@@ -102,7 +139,10 @@ public class OrganizeActivity extends AppCompatActivity {
         if (requestCode == LOCATION_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             String selectedLocation = data.getStringExtra("selected_location");
             if (selectedLocation != null) {
-                textLocation.setHint("      Lieu : " + selectedLocation);
+                // Afficher le nom du lieu dans l'EditText
+                textLocation.setText("      Lieu : " + selectedLocation);
+                // Ou si vous préférez garder le style avec le hint :
+                // textLocation.setHint("      Lieu : " + selectedLocation);
             }
         }
     }

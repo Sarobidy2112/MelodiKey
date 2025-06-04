@@ -63,11 +63,22 @@ public class DbConnect extends SQLiteOpenHelper {
         values.put(username, user.getUsername());
         values.put(email, user.getEmail());
         values.put(mdp, user.getMdp());
+
+        System.out.println("-------- Dans Add User : ");
+        System.out.println("Username = " + user.getUsername());
+        System.out.println("Email = " + user.getEmail());
+        System.out.println("Password = " + user.getMdp());
+
         db.insert(tableUsers, null, values);
     }
 
     public boolean checkUser(String email, String password){
         String hashedPassword = PasswordHasher.hashPassword(password);
+
+        System.out.println("------- Check User : ");
+        System.out.println("Email : " + email);
+        System.out.println("Mdp : " + hashedPassword);
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + tableUsers + " WHERE " + this.email + " = ? AND " + this.mdp + " = ? AND verified = 1", new String[]{email, hashedPassword});
 
