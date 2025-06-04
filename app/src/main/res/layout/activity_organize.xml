@@ -8,208 +8,192 @@
     tools:context=".OrganizeActivity"
     android:background="@drawable/bk">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:paddingBottom="100dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="14dp"
-                android:layout_marginEnd="24dp">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/intro_img" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/intro_img" />
+                    android:id="@+id/btnToLogin"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    app:srcCompat="@drawable/connexion" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Se connecter"
+                    android:textSize="10dp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageView
-                        android:id="@+id/btnToLogin"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/connexion" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Se connecter"
-                        android:textSize="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/btnToLogin" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Header avec logo et bouton connexion -->
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="410dp"
+            android:layout_height="329dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header">
 
             <TextView
                 android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Pour Creer votre repertoire"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <!-- Conteneur date -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pour Creer votre repertoire"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+                <EditText
+                    android:id="@+id/textDate"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bk_arrodi_gauche"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:drawablePadding="8dp"
+                    android:focusable="false"
+                    android:hint="      Choisir la date"
+                    android:padding="8dp"
+                    android:textColor="@color/black" />
+
+                <FrameLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bk_arrodi_droite">
+
+                    <ImageView
+                        android:id="@+id/datePicker"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/calendar" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Conteneur location -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
+                <EditText
+                    android:id="@+id/textLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bk_arrodi_gauche"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:drawablePadding="8dp"
+                    android:focusable="false"
+                    android:hint="      Choisir le lieu"
+                    android:padding="8dp"
+                    android:textColor="@color/black" />
+
+                <FrameLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bk_arrodi_droite">
+
+                    <ImageView
+                        android:id="@+id/locationPicker"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/location" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Conteneur spinner -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/custom_spinner_background"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="12dp">
+
+                <Spinner
+                    android:id="@+id/spinner_evenements"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    android:background="@android:color/transparent"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/textDate"
-                        android:layout_width="262dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/bk_arrodi_gauche"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:drawablePadding="8dp"
-                        android:focusable="false"
-                        android:hint="      Choisir la date"
-                        android:padding="8dp"
-                        android:textColor="@color/black"
-                        android:textColorHighlight="@color/cardview_dark_background" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bk_arrodi_droite">
-
-                        <ImageView
-                            android:id="@+id/datePicker"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/calendar" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-                    <EditText
-                        android:id="@+id/textLocation"
-                        android:layout_width="262dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/bk_arrodi_gauche"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:drawablePadding="8dp"
-                        android:focusable="false"
-                        android:hint="      Choisir le lieu"
-                        android:padding="8dp"
-                        android:textColor="@color/black"
-                        android:textColorHighlight="@color/cardview_dark_background" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bk_arrodi_droite">
-
-                        <ImageView
-                            android:id="@+id/locationPicker"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/location" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="24dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-                    <!-- Container avec bordure personnalisée -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/custom_spinner_background"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="12dp">
-
-                        <!-- Spinner sans bordure -->
-                        <Spinner
-                            android:id="@+id/spinner_evenements"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:spinnerMode="dropdown" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+            <!-- Bouton confirmer -->
+            <Button
+                android:id="@+id/ConfirmBtn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:backgroundTint="@color/purple"
+                android:text="Confirmer"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
         </LinearLayout>
 
-    </ScrollView>
+        <!-- Contenu centré -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

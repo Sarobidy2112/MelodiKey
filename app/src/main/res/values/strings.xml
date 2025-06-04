@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MelodiKey</string>
     <string name="selectionner_l_v_nement">Selectionner l\'évènement</string>
+    <string name="select_date">      Choisir la date</string>
 </resources>
